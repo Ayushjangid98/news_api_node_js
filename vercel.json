@@ -1,6 +1,6 @@
 {
     "version": 1,
-    "name": "news_api",
+    "name": "news-api-node-js",
     "builds": [
        { "src": "app.js", "use": "@vercel/node" }
     ],
