@@ -28,9 +28,10 @@ exports.getNews =async function (request, response) {
 
 exports.getCategoryViseNews =async function (request, response) {
   try {
-    console.log(request.params.id);
-    const newsData =await newsSchema.newsValidateSchema.find({"category_ids": {$in : [request.params.id]}}).populate({path: 'categories'});
-    return middleware.successMiddleware(newsData,response,"News add successful.");
+    paginationHelper.paginationHelper(newsSchema,request,async(perPageLimit,currentPage,totalPage,skipCount,documentCount)=>{
+      const newsData = await newsSchema.newsValidateSchema.find({"category_ids": {$in : [request.params.id]}}).skip(skipCount).limit(perPageLimit).populate({path: 'categories'});
+      return middleware.successWithPaginationMiddleware(newsData,response,"News get successful.",perPageLimit,currentPage,totalPage,skipCount,documentCount);
+    })
   } catch (e) {
     return middleware.failureMiddleware(e,response,"Something went wrong here."
     );
